@@ -1,15 +1,18 @@
 import {Outlet} from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import {FC} from "react";
 
-const Layout = () => {
+const Layout:FC = () => {
     return (
-        <div className={"min-h-[100vh] max-w-[1360px] mx-auto flex flex-col justify-between"}>
-            <Navbar/>
-            <Outlet/>
+        <>
+            <div className={"max-w-[1360px] mx-auto flex flex-col justify-between"}>
+                <Navbar/>
+                <Outlet/>
+            </div>
             <Footer/>
-        </div>
-    )
+        </>
+)
 }
 
 export default Layout

@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import {FormProps} from "../../types/IForm";
+import {FormProps} from "../../interfaces/IForm";
 import {useForm} from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -66,7 +66,7 @@ const Form: FC<FormProps> = ({type, children}) => {
                 <div className="flex items-center justify-center">
                     <button
                         type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
                         {type}
                     </button>
