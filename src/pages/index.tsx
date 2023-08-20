@@ -4,6 +4,7 @@ import Register from "./register";
 import CreateBlog from "./create-blog";
 import SingleBlog from "./single-blog";
 import NoMatch from "./no-match";
+import Profile from "./profile";
 
 
-export {Home, Login, Register, SingleBlog, CreateBlog, NoMatch}
+export {Home, Login, Register, SingleBlog, CreateBlog, NoMatch, Profile}
