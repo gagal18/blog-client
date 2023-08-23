@@ -4,6 +4,8 @@ import {useForm} from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import {loginValidationSchema, registerValidationSchema} from "../../schemas/form.schema";
 import {handleLogin, handleSignup} from "../../utils/auth";
+import { useNavigate } from 'react-router-dom';
+import {IRegister} from "../../interfaces/IAuth";
 
 
 
@@ -16,18 +18,48 @@ const Form: FC<FormProps> = ({type, children}) => {
     const [name, setName] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+    const [success, setSuccess] = useState<boolean>(false);
+    const [error, setError] = useState<string>();
+    const navigate = useNavigate()
 
-    const onSubmit = async (data) => {
+
+
+    const onSubmit = async (data: IRegister) => {
+        setLoading(true)
         if (type === 'login') {
-            await handleLogin(data);
+            await handleLogin(data).then(() => {
+                setSuccess(true)
+                setTimeout(() => {
+                    navigate('/');
+                }, 3000);
+            }).catch(err => {
+                setError(err)
+                setTimeout(() => {
+                    setError(null)
+                }, 3000);
+            })
         } else {
-            await handleSignup(data);
+            await handleSignup(data).then(() => {
+                setSuccess(true)
+                setTimeout(() => {
+                    navigate('/login');
+                }, 3000);
+            }).catch(err => {
+                setError(err)
+                setTimeout(() => {
+                    setError(null)
+                }, 3000);
+            })
         }
+        setLoading(false)
     };
-
     return (
         <div className="max-w-md w-full space-y-8 mx-auto">
-            <form onSubmit={handleSubmit(onSubmit)} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            {loading && <p className={"text-center"}>PLEASE WAIT</p>}
+            {success && <p className={"text-center"}>Succesfully register<br/>You are being redirected</p>}
+            {error && <p className={"text-center"}>There is an error<br/>{error?.response.data.message}</p>}
+            <form onSubmit={() => handleSubmit(onSubmit)} className={`bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 ${success ? "shadow-teal-500" : null} ${error ? "shadow-red-500" : null}`}>
                 {type !== "login" &&
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
@@ -84,7 +116,7 @@ const Form: FC<FormProps> = ({type, children}) => {
                         </label>
                         <input
                             {...register("confirmPassword")}
-                            type="confirmPassword"
+                            type="password"
                             id="confirmPassword"
                             name="confirmPassword"
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -105,6 +137,7 @@ const Form: FC<FormProps> = ({type, children}) => {
                 </div>
             </form>
             {children}
+
         </div>
     );
 };

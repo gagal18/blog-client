@@ -5,40 +5,35 @@ const headers = {
     'x-api-key': 'test',
 }
 
-export const handleSignup = async ({email, password, confirmPassword, name }) => {
-    axios.post('//localhost:4000/api/users/register', {
-        email,
-        password,
-        "passwordConfirm": confirmPassword,
-        name
-        },{
+
+export const handleSignup = async ({ email, password, confirmPassword, name }) => {
+    await axios.post('//localhost:4000/api/auth/register', {
+            email,
+            password,
+            passwordConfirm: confirmPassword,
+            name
+        }, {
             headers: headers,
             withCredentials: true
-        })
-        .then(function (response) {
-        console.log(response);
-        })
-        .catch(function (error) {
-        console.log(error);
-        });
+        }).then(res => {
+            console.log(res)
+            return res
 
+    }).catch(err => {
+            throw err;
+        })
 };
 
-
 export const handleLogin = async ({email, password}) => {
-    axios.post('//localhost:4000/api/users/login', {
+    await axios.post('//localhost:4000/api/auth/login', {
         email,
         password
     },{
-            headers: headers,
-            withCredentials: true
-        })
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+        headers: headers,
+        withCredentials: true
+    }).then(res => res).catch(err => {
+        throw err;
+    })
 
 };
 
@@ -49,9 +44,9 @@ export const handleCurrentUser = async () => {
         withCredentials: true
     })
         .then(function (response) {
-            console.log(response);
+            return response
         })
         .catch(function (error) {
-            console.log(error);
+            return error
         });
 };
